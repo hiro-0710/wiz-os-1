@@ -1,0 +1,26 @@
+{
+  "hiroya": {
+    "features": {
+      "politeness": 0.2,
+      "technical": 1.0,
+      "casual": 0.3,
+      "shortness": 0.4
+    }
+  },
+  "family": {
+    "features": {
+      "politeness": 0.9,
+      "technical": 0.1,
+      "casual": 0.2,
+      "shortness": 0.1
+    }
+  },
+  "guest": {
+    "features": {
+      "politeness": 0.5,
+      "technical": 0.2,
+      "casual": 0.2,
+      "shortness": 0.2
+    }
+  }
+}

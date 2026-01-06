@@ -1,0 +1,67 @@
+{
+  "axes": {
+    "silence": {
+      "label": "Silence",
+      "description": "Avoid noise, clutter, and unnecessary motion. Prioritize calm, breathable layouts.",
+      "weight": 0.24
+    },
+    "precision": {
+      "label": "Precision",
+      "description": "Align spacing, typography, and hierarchy with strict consistency.",
+      "weight": 0.22
+    },
+    "minimality": {
+      "label": "Minimality",
+      "description": "Remove anything that does not serve a clear purpose.",
+      "weight": 0.2
+    },
+    "luxury": {
+      "label": "Luxury",
+      "description": "Use subtle gradients, depth, and light to convey high-end presence.",
+      "weight": 0.18
+    },
+    "mystique": {
+      "label": "Mystique",
+      "description": "Preserve a sense of quiet unknown. Never over-explain, never shout.",
+      "weight": 0.16
+    }
+  },
+  "thresholds": {
+    "accept": 0.72,
+    "strong_accept": 0.82,
+    "reject": 0.55
+  },
+  "ui_guidelines": {
+    "colors": {
+      "background": ["#000000", "#020617", "#02030a", "#020617"],
+      "primary_glow": ["#3b82f6", "#60a5fa"],
+      "accent": ["#38bdf8", "#a855f7"],
+      "text_primary": "#e5f1ff",
+      "text_muted": "#94a3b8",
+      "border_soft": "rgba(148, 163, 184, 0.35)"
+    },
+    "shapes": {
+      "border_radius": {
+        "panel": 18,
+        "card": 14,
+        "chip": 999
+      }
+    },
+    "motion": {
+      "max_duration_ms": 260,
+      "min_duration_ms": 120,
+      "easing": ["ease-out", "cubic-bezier(0.16, 1, 0.3, 1)"]
+    },
+    "density": {
+      "max_components_per_view": 6,
+      "min_spacing_px": 8,
+      "preferred_spacing_px": 12
+    }
+  },
+  "language": {
+    "tone": {
+      "never": ["exclamation marks", "overly casual slang", "apology spam"],
+      "prefer": ["calm", "precise", "low-ego", "softly confident"]
+    }
+  }
+}
