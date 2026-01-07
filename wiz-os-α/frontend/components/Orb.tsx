@@ -1,9 +1,9 @@
 export default function Orb({
   aura,
-  loading,
+  loading = false,
 }: {
   aura: { pulse: number; color: string; noise: number };
-  loading: boolean;
+  loading?: boolean;
 }) {
   return (
     <div
