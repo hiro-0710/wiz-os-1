@@ -1,3 +1,5 @@
+"use client";
+
 import Orb from "./Orb";
 import HUD from "./HUD";
 import Ambient from "./Ambient";
@@ -7,10 +9,13 @@ export default function Layout({
   profile,
   children,
 }: {
-  aura: { pulse: number; color: string; noise: number };
-  profile: string;
+  aura?: { pulse: number; color: string; noise: number };
+  profile?: string;
   children: React.ReactNode;
 }) {
+  // SSR対策：aura が来るまで描画しない
+  if (!aura) return null;
+
   return (
     <div
       style={{
@@ -38,7 +43,7 @@ export default function Layout({
           alignItems: "center",
         }}
       >
-        <HUD aura={aura} profile={profile} />
+        <HUD aura={aura} profile={profile ?? ""} />
         <Orb aura={aura} />
       </div>
 
