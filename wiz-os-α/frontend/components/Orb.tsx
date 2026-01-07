@@ -1,10 +1,15 @@
+"use client";
+
 export default function Orb({
   aura,
   loading = false,
 }: {
-  aura: { pulse: number; color: string; noise: number };
+  aura?: { pulse: number; color: string; noise: number };
   loading?: boolean;
 }) {
+  // SSR対策：aura が null の間は描画しない
+  if (!aura) return null;
+
   return (
     <div
       style={{
