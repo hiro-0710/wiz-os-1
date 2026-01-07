@@ -1,24 +1,30 @@
-import { WizLog } from "../hooks/useWizEvolutionLoop";
+import { WizMessage } from "../hooks/useWizIntent";
 
-export default function LogPanel({ logs }: { logs: WizLog[] }) {
+export default function LogPanel({
+  messages,
+}: {
+  messages: WizMessage[];
+}) {
   return (
     <div
       style={{
-        width: "100%",
-        maxHeight: 200,
+        position: "absolute",
+        left: 20,
+        top: 100,
+        width: 260,
+        height: 400,
         overflowY: "auto",
-        padding: 10,
-        background: "rgba(255,255,255,0.03)",
-        borderRadius: 8,
-        fontSize: 12,
-        color: "#ccc",
+        color: "#fff",
+        fontSize: 14,
+        opacity: 0.9,
       }}
     >
-      {logs.map((log, i) => (
-        <div key={i} style={{ marginBottom: 6 }}>
-          <span style={{ opacity: 0.5 }}>{log.timestamp}</span>
-          <br />
-          {log.message}
+      {messages.map((m, i) => (
+        <div key={i} style={{ marginBottom: 12 }}>
+          <strong style={{ color: m.role === "user" ? "#6cf" : "#fc6" }}>
+            {m.role === "user" ? "You" : "Wiz"}
+          </strong>
+          <div>{m.content}</div>
         </div>
       ))}
     </div>
