@@ -1,65 +1,50 @@
 import { useState } from "react";
-import { WizState } from "./useWizState";
-import { WizLog } from "./useWizEvolutionLoop";
+import axios from "axios";
 
-export type Aura = {
-  pulse: number;
-  color: string;
-  noise: number;
-};
+export interface WizMessage {
+  role: "user" | "wiz";
+  content: string;
+  profile?: string;
+}
 
-export function useWizIntent(
-  state: WizState,
-  setState: (s: WizState) => void,
-  pushLog: (msg: string) => void
-) {
-  const [aura, setAura] = useState<Aura>({
-    pulse: 0.4,
-    color: "#ffffff",
-    noise: 0.05,
-  });
+export function useWizIntent() {
+  const [messages, setMessages] = useState<WizMessage[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  // ----------------------------------------
-  // Intent を backend に送る
-  // ----------------------------------------
   const sendIntent = async (intent: string) => {
-    // thinking に遷移
-    setState("thinking");
+    if (!intent.trim()) return;
 
-    // backend に送信
-    const res = await fetch("/api/intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ intent }),
-    });
+    // ユーザーの発話をログに追加
+    setMessages((prev) => [...prev, { role: "user", content: intent }]);
+    setLoading(true);
 
-    const data = await res.json();
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE}/intent`,
+        { intent }
+      );
 
-    // backend が返した aura を反映
-    if (data.result?.aura) {
-      setAura(data.result.aura);
+      const data = res.data;
+
+      // Wiz の応答をログに追加
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "wiz",
+          content: data.message,
+          profile: data.profile
+        }
+      ]);
+    } catch (err) {
+      console.error("Intent error:", err);
     }
 
-    // backend が返した state を反映
-    if (data.result?.state) {
-      setState(data.result.state as WizState);
-    }
-
-    // backend が返した message をログに追加
-    if (data.result?.message) {
-      pushLog(data.result.message);
-    }
-
-    // 最後に idle に戻す（必要なら）
-    setTimeout(() => {
-      setState("idle");
-      setAura({
-        pulse: 0.4,
-        color: "#ffffff",
-        noise: 0.05,
-      });
-    }, 1200);
+    setLoading(false);
   };
 
-  return { aura, sendIntent };
+  return {
+    messages,
+    sendIntent,
+    loading
+  };
 }
