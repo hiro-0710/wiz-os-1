@@ -2,12 +2,18 @@ import { useState } from "react";
 
 export default function InputPanel({
   onSend,
+  loading = false,
+  onEvolve,
+  onRollback,
 }: {
-  onSend: (text: string) => void;
+  onSend: (text: string) => void | Promise<void>;
+  loading?: boolean;
+  onEvolve?: () => void | Promise<void>;
+  onRollback?: () => void | Promise<void>;
 }) {
   const [text, setText] = useState("");
 
-  const send = () => {
+  const handleSend = () => {
     if (!text.trim()) return;
     onSend(text);
     setText("");
@@ -16,19 +22,20 @@ export default function InputPanel({
   return (
     <div
       style={{
+        width: "100%",
+        maxWidth: 600,
         display: "flex",
         gap: 10,
-        width: "100%",
+        padding: 10,
       }}
     >
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && send()}
-        placeholder="Wiz に話しかける..."
+        placeholder="メッセージを入力..."
         style={{
           flex: 1,
-          padding: "10px 14px",
+          padding: 10,
           borderRadius: 8,
           border: "1px solid #444",
           background: "#111",
@@ -37,18 +44,50 @@ export default function InputPanel({
       />
 
       <button
-        onClick={send}
+        onClick={handleSend}
+        disabled={loading}
         style={{
           padding: "10px 16px",
           borderRadius: 8,
-          background: "#333",
+          background: loading ? "#333" : "#0af",
           color: "#fff",
           border: "none",
-          cursor: "pointer",
         }}
       >
-        Send
+        送信
       </button>
+
+      {onEvolve && (
+        <button
+          onClick={onEvolve}
+          disabled={loading}
+          style={{
+            padding: "10px 12px",
+            borderRadius: 8,
+            background: "#6f0",
+            color: "#000",
+            border: "none",
+          }}
+        >
+          進化
+        </button>
+      )}
+
+      {onRollback && (
+        <button
+          onClick={onRollback}
+          disabled={loading}
+          style={{
+            padding: "10px 12px",
+            borderRadius: 8,
+            background: "#f60",
+            color: "#000",
+            border: "none",
+          }}
+        >
+          戻す
+        </button>
+      )}
     </div>
   );
 }
