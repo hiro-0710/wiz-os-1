@@ -1,15 +1,21 @@
-export default function Orb({ aura }: { aura: { pulse: number; color: string } }) {
+export default function Orb({
+  aura,
+  loading,
+}: {
+  aura: { pulse: number; color: string; noise: number };
+  loading: boolean;
+}) {
   return (
     <div
       style={{
-        width: 160,
-        height: 160,
+        width: 200,
+        height: 200,
         borderRadius: "50%",
         background: aura.color,
-        opacity: 0.6,
-        filter: `blur(40px)`,
-        transform: `scale(${aura.pulse})`,
-        transition: "transform 0.4s ease, background 0.4s ease",
+        opacity: loading ? 0.5 : 1,
+        filter: `blur(${aura.noise}px)`,
+        transform: `scale(${1 + aura.pulse * 0.02})`,
+        transition: "all 0.2s ease-out",
       }}
     />
   );
