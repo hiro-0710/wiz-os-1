@@ -4,9 +4,11 @@ import Ambient from "./Ambient";
 
 export default function Layout({
   aura,
+  profile,
   children,
 }: {
   aura: { pulse: number; color: string; noise: number };
+  profile: string;
   children: React.ReactNode;
 }) {
   return (
@@ -36,7 +38,7 @@ export default function Layout({
           alignItems: "center",
         }}
       >
-        <HUD aura={aura} />
+        <HUD aura={aura} profile={profile} />
         <Orb aura={aura} />
       </div>
 
