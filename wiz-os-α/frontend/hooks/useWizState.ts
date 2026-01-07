@@ -1,18 +1,32 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-export type WizState = "idle" | "thinking" | "evolving" | "error";
+export interface WizState {
+  aura: {
+    pulse: number;
+    color: string;
+    noise: number;
+  };
+  profile: string;
+}
 
 export function useWizState() {
-  const [state, setState] = useState<WizState>("idle");
+  const [state, setState] = useState<WizState | null>(null);
 
-  // ----------------------------------------
-  // 状態遷移の基本ロジック
-  // （必要に応じて Intent Engine と同期）
-  // ----------------------------------------
+  const fetchState = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE}/ui/state`
+      );
+      setState(res.data);
+    } catch (err) {
+      console.error("State fetch error:", err);
+    }
+  };
+
   useEffect(() => {
-    // ここでは最小構成として idle のまま開始
-    // Intent が送られたら useWizIntent 側で更新される
+    fetchState();
   }, []);
 
-  return { state, setState };
+  return { state, fetchState };
 }
