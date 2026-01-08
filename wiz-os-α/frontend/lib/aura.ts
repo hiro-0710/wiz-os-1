@@ -1,19 +1,27 @@
-export function auraColor(aura: string, profile: string): string {
-  const baseColors: Record<string, string> = {
-    hiroya: "#88ccff",   // 精密・冷静
-    family: "#ffd9b3",   // 柔らかい・暖色
-    guest:  "#cccccc",   // 中立・控えめ
-  };
+// Wiz Aura Utility
+// API から返ってくる aura の画像URLを安全に扱うためのヘルパー
 
-  const brightness: Record<string, number> = {
-    calm: 0.4,
-    focus: 0.55,
-    alert: 0.7,
-    dim: 0.25,
-  };
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  const base = baseColors[profile] || "#cccccc";
-  const alpha = brightness[aura] ?? 0.4;
+// API_URL が未設定の場合の安全対策
+if (!API_URL) {
+  console.warn("NEXT_PUBLIC_API_URL が設定されていません。Aura の画像URLが正しく生成されません。");
+}
 
-  return `${base}${Math.floor(alpha * 255).toString(16).padStart(2, "0")}`;
+/**
+ * API が返す aura の画像URLを絶対URLに変換する
+ * - すでに http で始まる場合 → そのまま使う
+ * - 相対パスの場合 → API_URL を付与して絶対URLにする
+ */
+export function resolveAuraUrl(path: string | null): string | null {
+  if (!path) return null;
+
+  // すでに絶対URLならそのまま
+  if (path.startsWith("http")) return path;
+
+  // API_URL が undefined の場合は null を返す（クラッシュ防止）
+  if (!API_URL) return null;
+
+  // 相対パス → 絶対URLに変換
+  return `${API_URL}${path}`;
 }
