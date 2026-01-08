@@ -1,27 +1,36 @@
 "use client";
 
-export default function HUD({
-  aura,
-  profile,
-}: {
-  aura?: { pulse: number; color: string; noise: number };
-  profile?: string;
-}) {
-  // SSR対策：aura が null の間は描画しない
-  if (!aura) return null;
+import React from "react";
+
+interface WizHUDProps {
+  src: string | null;
+  width?: number;
+}
+
+export default function WizHUD({ src, width = 260 }: WizHUDProps) {
+  // 画像が null の場合は描画しない（本番クラッシュ防止）
+  if (!src) return null;
 
   return (
     <div
       style={{
-        position: "absolute",
-        top: -20,
-        right: -20,
-        color: aura.color,
-        fontSize: 14,
-        opacity: 0.8,
+        width,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        pointerEvents: "none",
+        userSelect: "none",
       }}
     >
-      {profile ?? ""}
+      <img
+        src={src.startsWith("/") ? src : src}
+        alt="wiz-hud"
+        style={{
+          width: "100%",
+          height: "auto",
+          objectFit: "contain",
+        }}
+      />
     </div>
   );
 }
