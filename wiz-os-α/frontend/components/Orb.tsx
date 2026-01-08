@@ -1,27 +1,37 @@
 "use client";
 
-export default function Orb({
-  aura,
-  loading = false,
-}: {
-  aura?: { pulse: number; color: string; noise: number };
-  loading?: boolean;
-}) {
-  // SSR対策：aura が null の間は描画しない
-  if (!aura) return null;
+import React from "react";
+
+interface WizOrbProps {
+  src: string | null;
+  size?: number;
+}
+
+export default function WizOrb({ src, size = 120 }: WizOrbProps) {
+  // 画像が null の場合は何も描画しない（本番でのクラッシュ防止）
+  if (!src) return null;
 
   return (
     <div
       style={{
-        width: 200,
-        height: 200,
-        borderRadius: "50%",
-        background: aura.color,
-        opacity: loading ? 0.5 : 1,
-        filter: `blur(${aura.noise}px)`,
-        transform: `scale(${1 + aura.pulse * 0.02})`,
-        transition: "all 0.2s ease-out",
+        width: size,
+        height: size,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
-    />
+    >
+      <img
+        src={src.startsWith("/") ? src : src}
+        alt="wiz-orb"
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      />
+    </div>
   );
 }
